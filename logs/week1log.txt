@@ -1,0 +1,40 @@
+WEEK 1 LOG of Generated Content Detector
+
+1. Repository Setup
+   - Created public GitHub repository:
+     CAP6415_F25_project-Generated-Content-Detector
+   - Setting up initial folder structure as:
+     data/, src/, results/, logs/.
+
+2. Project Definition
+   - Finalized project: Generated Content Detector.
+   - Defined goals:
+     * Classifying real vs AI-generated images.
+     * Study cross-generator generalization which train on one generator, test on another.
+     * Evaluate robustness to compression, blur, and noise.
+   - The initial abstract and description is written in README.md.
+
+3. Environment & Dependencies
+   - Installed:
+     * Python 3.10+
+     * PyTorch and Torchvision
+     * OpenCV, NumPy, Matplotlib, scikit-learn, Pillow
+   - Created the requirements.txt file with core dependencies in it.
+
+4. Dataset Research
+   - Began exploring potential datasets but have not finalized one yet.
+   - Reviewed several public options for real vs AI-generated images:
+     * ArtiFact (Kaggle) – labeled real and synthetic images from multiple generators.
+     * GenImage benchmark – large-scale diffusion/GAN-generated image dataset.
+     * Real image sources for authentic samples.
+
+5. Planning for Week 2
+   - What to do for next week:
+     * Implement basic data loader in src/data_loader.py.
+     * Implement classical-feature baseline in src/classical_baseline.py:
+       - Color histograms, edge-based features, simple frequency features.
+     * Run first baseline experiment and log initial accuracy and confusion matrix.
+
+Summary:
+Week 1 focused on setting up the repository on fau id, defining the project scope and goals, preparing the environment for the project, and researching datasets. 
+No models were trained yet; the emphasis was on infrastructure and planning to ensure smoother progress in later weeks.
