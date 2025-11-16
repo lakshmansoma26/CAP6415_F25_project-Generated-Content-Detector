@@ -1,0 +1,47 @@
+WEEK 2 LOG Generated Content Detector.
+-------------------------------------
+
+Dataset Preparation
+   - Collected "RealArt" (real) and "AiArtData" (AI-generated) of the cashbowman dataset.
+   - Divided into train and test with an approximation of 80/20 ratio using src/splitdataset.py.
+   - Final counts:
+      Train: 775 images (347 real, 428 fake)
+      Test:  195 images (87 real, 108 fake)
+
+Classical Feature Pipeline
+   - Added feature extraction to src/features.py:
+      BGR color histograms (96 dimensions) 3 times, 32-bin.
+      Statistics of Sobel edge magnitude (mean, std) on grayscale (2 dimensions).
+      Energy ratio high frequency FFT (1 dimensional).
+   - Reduced to 99-dimensional image feature.
+
+Baseline Models
+   - Added baselines in src/classicalbaseline.py:
+      The logistic regression (classweight=balanced, maxiter=1000, njobs= -1).
+      Linear SVM (LinearSVC classweight=balanced).
+   - Test-set results (195 images):
+      Logistic Regression:
+       - Accuracy ≈ 0.667
+       - Confusion matrix:
+         [[53 34],
+          [31 77]]
+       - Real: precision ≈ 0.63, recall ≈ 0.61
+       - Fake: precision ≈ 0.69, recall ≈ 0.71
+     * Linear SVM:
+       - Accuracy ≈ 0.662
+       - Confusion matrix:
+         [[54 33],
+          [33 75]]
+       - Real: precision ≈ 0.62, recall ≈ 0.62
+       - Fake: precision ≈ 0.69, recall ≈ 0.69
+   - Saved the metrics to results/week2baselines.csv and confusion matrices to
+     results/cmlr.png and results/cm_svm.png.
+
+Observations
+   - Classical worldly characteristics only have a maximum of about 66-67 percent accuracy.
+   - Model is to some extent skewed towards predicting the fake class.
+   - This is the base on which future CNN-based models will have to perform better.
+
+Plan for Week 3
+   - use a multi Forensic Feature Engineering Extractors.
+   - Compare Forensic Extractors to the classical baselines on the same split.
