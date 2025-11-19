@@ -1,0 +1,48 @@
+WEEK 3 development log- Forensic Feature Engineering.
+------------------------------------------------------
+
+1. DCB Forensic Visa 
+   - Applied 8 x 8 block DCT statistics in forensics dct.py.
+   - For each image, extracted:
+       * Means and standard deviation of high frequency DCT coefficients.
+       * Mid-frequency and high-frequency DCT energy.
+   - Included in src/features.py, dimensionality expansion of features.
+     from 99 to 107.
+   - Test-set results (195 images):
+       * Logistic Regression:
+           - Accuracy ≈ 0.677 (up from ≈ 0.667 in Week 2).
+       * Linear SVM:
+           - Accuracy ≈ 0.708 (up from ≈ 0.662 in Week 2).
+   Results/week3_dct_baselines.csv saved as metrics.
+   - Conclusion: DCT block statistics give helpful forensic clues and
+     evidently enhance the classical SVM-detector.
+
+2. LBP-on-Laplacian Texture Histogram (Ablation)
+   - Introduced a Laplacian texture map of 256D LBP histogram in src/forensics_lbp.py.
+   - Pipeline:
+       * Grayscale conversion, Laplacian.
+       * Resize to 128x128 to save on computation.
+       * 8-neighbor LBP code computation on stride-2 grid.
+       * Construct a 256 bin normalized histogram.
+   - Added: (src/features.py) For more feature dimension size.
+     107 to 363.
+   - Test-set results with DCT + LBP:
+       * Logistic Regression: accuracy = 0.667 (no improvement).
+       * Linear SVM: accuracy 0.672 (decrease of 0.708 with DCT-only).
+   - Results/week3/forensic/full/baselines/metrics saved as results/week3_forensic_full_baselines.csv.
+   - Conclusion: LBP-on-Laplacian is applicable to this dataset, with the present models.
+     is not a help and has a slightly demoralizing effect. It is documented as
+     a negative result of ablation, and DCT-only features are retained as the
+     enhancing classical baselines with primary forensic augmentation.
+
+3. Repository Updates
+   - changes to src/features.py which uses DCT-augmented features as default.
+     classical feature vector.
+   - stored src/forensics_lbp.py in the repo later to be used in experiments.
+     vetoed it as a main-feature feature.
+   - revised README.md containing the results of Week 3 and tables.
+
+4. Next Steps
+   Week 4: Experiment with robustness (JPEG compression, blur, etc.)
+     noise on the classical models with DCT augmentations.
+   

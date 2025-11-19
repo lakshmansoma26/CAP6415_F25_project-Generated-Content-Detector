@@ -125,7 +125,7 @@ def run_baselines():
     }
 
     df = pd.DataFrame(data)
-    out_path = os.path.join("results", "week2_baselines.csv")
+    out_path = os.path.join("results", "week3_dct_baselines.csv")
     df.to_csv(out_path, index=False)
     print(f"\nSaved baseline metrics to {out_path}")
 

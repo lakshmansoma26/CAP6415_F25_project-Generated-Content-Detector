@@ -1,0 +1,3 @@
+model,accuracy
+logistic_regression,0.6666666666666666
+linear_svm,0.6717948717948717

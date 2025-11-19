@@ -41,3 +41,46 @@ logs/       - weekly development logs
 
 Confusion matrices are saved in `results/cm_lr.png` and `results/cm_svm.png`.  
 These baselines show that simple global statistics are not sufficient for reliable AI-art detection, motivating CNN-based detectors and more forensic-style features in later weeks.
+
+
+
+## Week 3 – Forensic Feature Engineering & Ablation
+
+In Week 3, classical baselines were extended with digital-forensics
+inspired features.
+
+### 1. 8×8 DCT Block Statistics (Successful)
+
+For each grayscale image, 8×8 DCT blocks were computed and the following
+statistics were extracted:
+
+- Mean and std of high-frequency coefficients
+- Energy of mid-frequency and high-frequency bands
+
+This produced an 8-dimensional forensic descriptor, increasing the
+feature dimension from 99 → 107.
+
+**Test-set performance (195 images):**
+
+| Model               | Week 2 (Classical) | Week 3 (Classical + DCT) |
+|---------------------|--------------------|---------------------------|
+| Logistic Regression | 0.667              | ~0.677                    |
+| Linear SVM          | 0.662              | ~0.708                |
+
+Metrics are saved in `results/week3_dct_baselines.csv`.
+
+### 2. LBP-on-Laplacian Texture Histogram (Negative Result)
+
+A 256-D LBP histogram over a Laplacian texture map was also tested,
+increasing the total feature dimension to 363. However, this did not
+improve performance:
+
+| Model               | DCT-only | DCT + LBP |
+|---------------------|----------|-----------|
+| Logistic Regression | ~0.677   | ~0.667    |
+| Linear SVM          | ~0.708   | ~0.672    |
+
+Metrics are saved in `results/week3_forensic_full_baselines.csv`.  
+This feature is kept as an ablation result, and the default classical
+pipeline uses only the DCT-augmented features, which showed the best
+performance.

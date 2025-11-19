@@ -1,7 +1,12 @@
 import cv2
 import numpy as np
 
+from forensics_dct import dct_block_features
+from forensics_lbp import lbp_laplacian_features
+
+
 def load_bgr(path: str) -> np.ndarray:
+ 
     img = cv2.imread(path, cv2.IMREAD_COLOR)
     if img is None:
         raise ValueError(f"Could not read image: {path}")
@@ -9,6 +14,7 @@ def load_bgr(path: str) -> np.ndarray:
 
 
 def rgb_histogram(img: np.ndarray, bins: int = 32) -> np.ndarray:
+
     feats = []
     for ch in range(3):
         hist = cv2.calcHist([img], [ch], None, [bins], [0, 256])
@@ -18,6 +24,7 @@ def rgb_histogram(img: np.ndarray, bins: int = 32) -> np.ndarray:
 
 
 def edge_stats(img: np.ndarray) -> np.ndarray:
+  
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     grad_x = cv2.Sobel(gray, cv2.CV_32F, 1, 0, ksize=3)
     grad_y = cv2.Sobel(gray, cv2.CV_32F, 0, 1, ksize=3)
@@ -26,6 +33,7 @@ def edge_stats(img: np.ndarray) -> np.ndarray:
 
 
 def fft_highfreq_ratio(img: np.ndarray, low_freq_ratio: float = 0.1) -> np.ndarray:
+  
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     gray = gray.astype(np.float32) / 255.0
 
@@ -47,11 +55,14 @@ def fft_highfreq_ratio(img: np.ndarray, low_freq_ratio: float = 0.1) -> np.ndarr
 
 
 def extract_features(path: str) -> np.ndarray:
+    
     img = load_bgr(path)
-    h = rgb_histogram(img)
-    e = edge_stats(img)
-    f = fft_highfreq_ratio(img)
-    return np.concatenate([h, e, f]).astype(np.float32)
+
+    h = rgb_histogram(img)          # 96 dims
+    e = edge_stats(img)             # 2 dims
+    f = fft_highfreq_ratio(img)     # 1 dim
+    dct_feats = dct_block_features(img)  # 8 dims
+    return np.concatenate([h, e, f, dct_feats]).astype(np.float32)
 
 
 if __name__ == "__main__":
