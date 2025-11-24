@@ -98,13 +98,13 @@ tested on distorted versions of the test images.
 
 The following perturbations were applied to the test set:
 
-- **clean** – no distortion 
-- **jpeg_q50** – JPEG compression with quality = 50
-- **jpeg_q30** – JPEG compression with quality = 30
-- **blur_5** – Gaussian blur, kernel size 5
-- **blur_9** – Gaussian blur, kernel size 9
-- **noise_10** – additive Gaussian noise, σ = 10
-- **noise_20** – additive Gaussian noise, σ = 20
+- clean – no distortion 
+- jpeg_q50 – JPEG compression with quality = 50
+- jpeg_q30 – JPEG compression with quality = 30
+- blur_5 – Gaussian blur, kernel size 5
+- blur_9 – Gaussian blur, kernel size 9
+- noise_10 – additive Gaussian noise, σ = 10
+- noise_20 – additive Gaussian noise, σ = 20
 
 ### Robustness Results (Test Set, 195 Images)
 
