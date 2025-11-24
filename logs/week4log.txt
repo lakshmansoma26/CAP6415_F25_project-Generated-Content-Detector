@@ -1,0 +1,67 @@
+WEEK 4 DEVELOPMENT LOG – ROBUSTNESS EVALUATION
+
+
+1. Robustness Evaluation Script
+   - Implemented src/robustness.py to evaluate how the classical
+     DCT-augmented detector behaves under common real-world distortions.
+   - The script:
+       - Trains Logistic Regression and Linear SVM on CLEAN train features
+         (classical + DCT, 107-D).
+       - Evaluates both models on multiple distorted versions of the test set.
+       - Saves accuracies for each distortion scenario to
+         results/week4_robustness.csv.
+
+2. Distortion Scenarios
+   - Tested the following perturbations applied only to test images:
+       * clean: no distortion.
+       * jpeg_q50: JPEG compression with quality = 50.
+       * jpeg_q30: JPEG compression with quality = 30.
+       * blur_5: Gaussian blur with ksize = 5.
+       * blur_9: Gaussian blur with ksize = 9.
+       * noise_10: Additive Gaussian noise with σ = 10.
+       * noise_20: Additive Gaussian noise with σ = 20.
+
+3. Quantitative Results (Test Set, 195 Images)
+   - Summary of observed accuracies:
+       * clean:
+           - LR ≈ 0.677
+           - SVM ≈ 0.708
+       * jpeg_q50:
+           - LR ≈ 0.667
+           - SVM ≈ 0.656
+       * jpeg_q30:
+           - LR ≈ 0.662
+           - SVM ≈ 0.646
+       * blur_5:
+           - LR ≈ 0.677
+           - SVM ≈ 0.667
+       * blur_9:
+           - LR ≈ 0.682
+           - SVM ≈ 0.672
+       * noise_10:
+           - LR ≈ 0.574
+           - SVM ≈ 0.590
+       * noise_20:
+           - LR ≈ 0.569
+           - SVM ≈ 0.574
+
+4. Observations
+   - JPEG Compression:
+       * Moderate compression (Q=50,30) introduces only a small drop in
+         accuracy compared to the clean case, indicating some robustness
+         to JPEG artifacts.
+   - Blur:
+       * Gaussian blur with k=5 and k=9 has limited impact on performance;
+         accuracy remains similar to the clean case. This suggests that
+         color histograms and DCT statistics are reasonably stable under
+         mild blurring.
+   - Noise:
+       * Additive Gaussian noise dramatically reduces accuracy for both
+         LR and SVM, down to ~0.57–0.59. This highlights that noise is a
+         major weakness for the current classical + DCT detector.
+
+5. Next Steps
+   - Use these robustness results as a baseline for comparison once a
+     CNN-based detector (ResNet-18) is implemented.
+   - Investigate whether CNN features and/or hybrid CNN + forensic
+     models can improve robustness, particularly against noise.

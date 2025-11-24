@@ -84,3 +84,50 @@ Metrics are saved in `results/week3_forensic_full_baselines.csv`.
 This feature is kept as an ablation result, and the default classical
 pipeline uses only the DCT-augmented features, which showed the best
 performance.
+
+
+
+## Week 4 – Robustness to Distortions
+
+In Week 4, the robustness of the classical DCT-augmented detector was
+evaluated under common real-world distortions. The Logistic Regression
+and Linear SVM models were trained once on clean training data and then
+tested on distorted versions of the test images.
+
+### Distortion Scenarios
+
+The following perturbations were applied to the test set:
+
+- **clean** – no distortion 
+- **jpeg_q50** – JPEG compression with quality = 50
+- **jpeg_q30** – JPEG compression with quality = 30
+- **blur_5** – Gaussian blur, kernel size 5
+- **blur_9** – Gaussian blur, kernel size 9
+- **noise_10** – additive Gaussian noise, σ = 10
+- **noise_20** – additive Gaussian noise, σ = 20
+
+### Robustness Results (Test Set, 195 Images)
+
+| Scenario  | LR Accuracy | SVM Accuracy |
+|----------|-------------|--------------|
+| clean    | 0.677       | 0.708        |
+| jpeg_q50 | 0.667       | 0.656        |
+| jpeg_q30 | 0.662       | 0.646        |
+| blur_5   | 0.677       | 0.667        |
+| blur_9   | 0.682       | 0.672        |
+| noise_10 | 0.574       | 0.590        |
+| noise_20 | 0.569       | 0.574        |
+
+Results are stored in `results/week4_robustness.csv`.
+
+### Summary
+
+- The detector is relatively robust to moderate JPEG compression and
+  mild Gaussian blur, with only small drops in accuracy compared to the
+  clean condition.
+- Performance degrades significantly under additive Gaussian noise,
+  revealing a key weakness of the current classical + DCT feature
+  pipeline.
+- These robustness measurements provide a baseline that will be
+  compared against future CNN-based detectors and hybrid forensic +
+  CNN models in later weeks.
