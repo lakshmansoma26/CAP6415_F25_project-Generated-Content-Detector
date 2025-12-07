@@ -1,0 +1,11 @@
+# Ignore datasets
+data/
+
+# Ignore compiled Python files
+__pycache__/
+
+# Ignore model checkpoints
+results/models/
+
+# Ignore Jupyter checkpoints
+.ipynb_checkpoints/
