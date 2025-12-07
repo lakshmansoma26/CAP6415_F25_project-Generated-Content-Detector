@@ -32,7 +32,7 @@ logs/       - weekly development logs
   - Logistic Regression (class-balanced)
   - Linear SVM (class-balanced)
 
-**Test-set performance (195 images):**
+Test-set performance (195 images):
 
 | Model               | Accuracy |
 |---------------------|----------|
@@ -49,7 +49,7 @@ These baselines show that simple global statistics are not sufficient for reliab
 In Week 3, classical baselines were extended with digital-forensics
 inspired features.
 
-### 1. 8×8 DCT Block Statistics (Successful)
+ 1. 8×8 DCT Block Statistics (Successful)
 
 For each grayscale image, 8×8 DCT blocks were computed and the following
 statistics were extracted:
@@ -60,7 +60,7 @@ statistics were extracted:
 This produced an 8-dimensional forensic descriptor, increasing the
 feature dimension from 99 → 107.
 
-**Test-set performance (195 images):**
+Test-set performance (195 images):
 
 | Model               | Week 2 (Classical) | Week 3 (Classical + DCT) |
 |---------------------|--------------------|---------------------------|
@@ -131,3 +131,44 @@ Results are stored in `results/week4_robustness.csv`.
 - These robustness measurements provide a baseline that will be
   compared against future CNN-based detectors and hybrid forensic +
   CNN models in later weeks.
+
+
+
+
+  ## Week 5 – CNN-Based Detector (ResNet-18) and Inference
+
+In Week 5, a deep learning model was introduced to significantly improve
+AI-generated image detection performance and make the system usable on
+individual images.
+
+### ResNet-18 Training
+
+A ResNet-18 model (pretrained on ImageNet) was fine-tuned on the
+cashbowman dataset:
+
+- Train / test split: `data/raw/train` and `data/raw/test`  
+  (`real` vs `fake` folders).
+- Data augmentation:
+  - Resize to 256×256
+  - RandomResizedCrop(224)
+  - Random horizontal flip
+  - Normalization with ImageNet mean and std
+- Optimizer: Adam (lr = 1e-4)
+- Loss: CrossEntropyLoss
+- Epochs: 15, batch size: 32
+
+Best test accuracy: **~0.8564**, compared to ~0.71 for the classical + DCT SVM baseline.
+
+Training history is saved in:
+- `results/week5_cnn_resnet18_metrics.csv`
+
+The best model checkpoint is saved in:
+- `results/models/resnet18_best.pth`
+
+### Single-Image Prediction (CLI Tool)
+
+To make the system more practical, a single-image inference script was
+added:
+
+python src/predict_cnn.py --image path/to/image.jpg
+

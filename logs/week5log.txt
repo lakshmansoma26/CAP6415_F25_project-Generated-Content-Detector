@@ -1,0 +1,54 @@
+WEEK 5 DEVELOPMENT LOG – CNN DETECTOR & INFERENCE
+--------------------------------------------------
+
+1. ResNet-18 CNN Detector
+   - Implemented src/cnn_resnet.py to train a deep model for AI-generated
+     image detection.
+   - Used torchvision ResNet-18 with an ImageNet-pretrained backbone and
+     replaced the final fully-connected layer with a 2-class head.
+   - Training setup:
+       * Train / test split: data/raw/train and data/raw/test
+         (real vs fake folders).
+       * Data augmentation: Resize(256), RandomResizedCrop(224),
+         RandomHorizontalFlip, normalization with ImageNet mean/std.
+       * Optimizer: Adam (lr = 1e-4).
+       * Loss: CrossEntropyLoss.
+       * Epochs: 15, batch size: 32.
+   - Results:
+       * Best test accuracy: ~0.8564.
+       * Training accuracy approaches ~0.98–0.99, indicating some
+         overfitting but still good generalization on the held-out test set.
+   - Saved the best model checkpoint to:
+       results/models/resnet18_best.pth
+   - Logged per-epoch metrics to:
+       results/week5_cnn_resnet18_metrics.csv
+
+2. CNN Inference Script (Single-Image Prediction)
+   - Implemented src/predict_cnn.py to enable single-image inference.
+   - The script:
+       * Reads class order from data/raw/train (['fake', 'real']).
+       * Loads the trained ResNet-18 weights from
+         results/models/resnet18_best.pth.
+       * Applies the same preprocessing as the test pipeline
+         (Resize → CenterCrop → Normalize).
+       * Outputs the predicted label and softmax probabilities.
+   - Example usage:
+       python src/predict_cnn.py --image data/raw/test/fake/<filename>.jpg
+       python src/predict_cnn.py --image data/raw/test/real/<filename>.jpg
+   - Example results:
+       * Fake test image:
+           - Prediction: FAKE, confidence ≈ 0.9997
+       * Real test image:
+           - Prediction: REAL, confidence ≈ 1.0000
+   - This script effectively turns the project into a tool that can
+     classify new images (within the same domain) as AI-generated or real.
+
+3. Comparison to Classical Baselines
+   - Classical + DCT SVM baseline:
+       * Test accuracy ≈ 0.71
+   - ResNet-18 CNN:
+       * Best test accuracy ≈ 0.8564
+   - Conclusion:
+       * The CNN significantly outperforms the classical feature-based
+         models, confirming the benefit of end-to-end deep learning for
+         this detection task.
